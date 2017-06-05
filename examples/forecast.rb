@@ -15,5 +15,4 @@ OWMO::weather api_key: api_key do |weather|
   forecast = weather.get :forecast, params
 
   puts forecast
-
 end

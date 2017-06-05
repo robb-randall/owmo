@@ -15,5 +15,4 @@ OWMO::weather api_key: api_key do |weather|
   extended = weather.get :extended, params
 
   puts extended
-
 end

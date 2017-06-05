@@ -14,6 +14,5 @@ OWMO::weather api_key: api_key do |weather|
 
   current_condition = weather.get :current, params
 
-  OWMO::pretty_json current_condition
-
+  puts current_condition
 end
