@@ -22,7 +22,61 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+You'll need and API key from OpenWeatherMap.org (http://openweathermap.org/appid).
+
+Either instanciate the OWMO::Weather class:
+```ruby
+require 'owmo'
+api_key = ""
+
+weather = OWMO::Weather.new api_key: api_key
+```
+
+or through the OWMO::weather method block:
+```ruby
+require 'owmo'
+api_key = ""
+
+OWMO::weather api_key: api_key do |weather|
+    puts weather.get :current, city_name: "London,uk"
+end
+```
+
+**Current weather data** (http://openweathermap.org/current)
+```ruby
+  params = {
+    city_name: "London,uk", # [city_name, city_id, zip, lat/lon]
+    mode: 'json', # [json, xml, html] Not required, but an option
+    units: 'imperial', # [imperial, metric] Not required, but an option
+    lang: 'en_US' # Not required, but an option
+  }
+
+  puts weather.get :current, params
+
+```
+**5 day weather forecast** (http://openweathermap.org/forecast5)
+```ruby
+  params = {
+    zip: "90210", # [city_name, city_id, zip, lat/lon]
+    mode: 'json', # [json, xml, html] Not required, but an option
+    units: 'imperial', # [imperial, metric] Not required, but an option
+    lang: 'en_US' # Not required, but an option
+  }
+
+  puts weather.get :forecast, params
+```
+
+**16 day weather forecast** (http://openweathermap.org/forecast16)
+```ruby
+  params = {
+    lat: "40.7128", lon: "74.0059",  # [city_name, city_id, zip, lat/lon]
+    mode: 'json', # [json, xml, html] Not required, but an option
+    units: 'imperial', # [imperial, metric] Not required, but an option
+    lang: 'en_US' # Not required, but an option
+  }
+
+  puts weather.get :extended, params
+```
 
 ## Development
 
