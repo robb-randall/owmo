@@ -1,8 +1,6 @@
-# Owmo
+# OWMO - OpenWeatherMap.Org Client API
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/owmo`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Ruby client for openweathermap.org client API.  Currently only for current and forecast information.
 
 ## Installation
 
@@ -24,23 +22,26 @@ Or install it yourself as:
 
 You'll need and API key from OpenWeatherMap.org (http://openweathermap.org/appid).
 
-Either instanciate the OWMO::Weather class:
+Compelete examples can be found under owmo/examples.
+
+----
+## Quick Start
+
 ```ruby
 require 'owmo'
-api_key = ""
-
+api_key = "<api key here>"
 weather = OWMO::Weather.new api_key: api_key
+puts weather.get :current, zip: 52402
 ```
 
-or through the OWMO::weather method block:
 ```ruby
 require 'owmo'
-api_key = ""
-
+api_key = "<api key here>"
 OWMO::weather api_key: api_key do |weather|
-    puts weather.get :current, city_name: "London,uk"
+puts weather.get :forecast, zip: 52402
 end
 ```
+----
 
 **Current weather data** (http://openweathermap.org/current)
 ```ruby
