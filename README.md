@@ -25,7 +25,7 @@ You'll need and API key from OpenWeatherMap.org (http://openweathermap.org/appid
 Compelete examples can be found under owmo/examples.
 
 ----
-## Quick Start
+### Quick Start
 
 ```ruby
 require 'owmo'
@@ -43,7 +43,7 @@ end
 ```
 ----
 
-**Current weather data** (http://openweathermap.org/current)
+### Current weather data (http://openweathermap.org/current)
 ```ruby
   params = {
     city_name: "London,uk", # [city_name, city_id, zip, lat/lon]
@@ -55,7 +55,7 @@ end
   puts weather.get :current, params
 
 ```
-**5 day weather forecast** (http://openweathermap.org/forecast5)
+### 5 day weather forecast (http://openweathermap.org/forecast5)
 ```ruby
   params = {
     zip: "90210", # [city_name, city_id, zip, lat/lon]
@@ -67,7 +67,7 @@ end
   puts weather.get :forecast, params
 ```
 
-**16 day weather forecast** (http://openweathermap.org/forecast16)
+### 16 day weather forecast (http://openweathermap.org/forecast16)
 ```ruby
   params = {
     lat: "40.7128", lon: "74.0059",  # [city_name, city_id, zip, lat/lon]
