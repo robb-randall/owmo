@@ -2,6 +2,8 @@
 
 Ruby client for openweathermap.org client API.  Currently only for current and forecast information.
 
+[![Gem Version](https://badge.fury.io/rb/owmo.svg)](https://badge.fury.io/rb/owmo)
+
 ## Installation
 
 Add this line to your application's Gemfile:
