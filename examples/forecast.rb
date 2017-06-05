@@ -4,16 +4,16 @@ api_key = ""
 
 OWMO::weather api_key: api_key do |weather|
 
-  # http://openweathermap.org/current#data
+  # http://openweathermap.org/forecast5
   params = {
-    city_name: "London,uk", # [city_name, city_id, zip, lat/lon]
+    zip: "90210", # [city_name, city_id, zip, lat/lon]
     mode: 'json', # [json, xml, html] Not required, but an option
     units: 'imperial', # [imperial, metric] Not required, but an option
     lang: 'en_US' # Not required, but an option
   }
 
-  current_condition = weather.get :current, params
+  forecast = weather.get :forecast, params
 
-  OWMO::pretty_json current_condition
+  puts forecast
 
 end

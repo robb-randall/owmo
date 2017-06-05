@@ -1,4 +1,3 @@
-require 'json'
 require 'net/http'
 
 module OWMO
@@ -8,7 +7,7 @@ module OWMO
 
     def initialize(**kwargs)
       raise "Missing required api_key" if kwargs[:api_key].nil?
-      @url = kwargs[:url] || 'http://api.openweathermap.org/data/2.5'
+      @url = kwargs[:url] || OWMO::URL
       @api_key = kwargs[:api_key]
     end # initialize
 
@@ -58,11 +57,9 @@ module OWMO
 
       # Search by Zip
       when params.key?(:zip) then
-        Nil
 
       # Search by geo location
       when params.key?(:lat) && params.key?(:lon) then
-        Nil
 
       # Nothing is specified, raise an error
       else raise "Missing location parameter: #{params}"
