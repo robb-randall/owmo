@@ -38,7 +38,7 @@ puts weather.get :current, zip: 52402
 require 'owmo'
 api_key = "<api key here>"
 OWMO::weather api_key: api_key do |weather|
-puts weather.get :forecast, zip: 52402
+    puts weather.get :forecast, zip: 52402
 end
 ```
 ----
