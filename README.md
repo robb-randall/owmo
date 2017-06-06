@@ -1,8 +1,8 @@
-# Owmo
+# OWMO - OpenWeatherMap.Org Client API
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/owmo`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ruby client for openweathermap.org client API.  Currently only for current and forecast information.
 
-TODO: Delete this and the text above, and describe your gem
+[![Gem Version](https://badge.fury.io/rb/owmo.svg)](https://badge.fury.io/rb/owmo)
 
 ## Installation
 
@@ -24,25 +24,28 @@ Or install it yourself as:
 
 You'll need and API key from OpenWeatherMap.org (http://openweathermap.org/appid).
 
-Either instanciate the OWMO::Weather class:
+Compelete examples can be found under owmo/examples.
+
+----
+### Quick Start
+
 ```ruby
 require 'owmo'
-api_key = ""
-
+api_key = "<api key here>"
 weather = OWMO::Weather.new api_key: api_key
+puts weather.get :current, zip: 52402
 ```
 
-or through the OWMO::weather method block:
 ```ruby
 require 'owmo'
-api_key = ""
-
+api_key = "<api key here>"
 OWMO::weather api_key: api_key do |weather|
-    puts weather.get :current, city_name: "London,uk"
+    puts weather.get :forecast, zip: 52402
 end
 ```
+----
 
-**Current weather data** (http://openweathermap.org/current)
+### Current weather data (http://openweathermap.org/current)
 ```ruby
   params = {
     city_name: "London,uk", # [city_name, city_id, zip, lat/lon]
@@ -54,7 +57,7 @@ end
   puts weather.get :current, params
 
 ```
-**5 day weather forecast** (http://openweathermap.org/forecast5)
+### 5 day weather forecast (http://openweathermap.org/forecast5)
 ```ruby
   params = {
     zip: "90210", # [city_name, city_id, zip, lat/lon]
@@ -66,7 +69,7 @@ end
   puts weather.get :forecast, params
 ```
 
-**16 day weather forecast** (http://openweathermap.org/forecast16)
+### 16 day weather forecast (http://openweathermap.org/forecast16)
 ```ruby
   params = {
     lat: "40.7128", lon: "74.0059",  # [city_name, city_id, zip, lat/lon]
