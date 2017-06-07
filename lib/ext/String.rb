@@ -5,14 +5,14 @@ require 'uri'
 class String
 
 	public
-	def to_uri(params=nil)
-		case params
+	def to_uri(query=nil)
+		case query
 		when nil then
 			URI self
 		when String
-			URI "#{self}?#{params}"
+			URI "#{self}?#{query}"
 		when Array, Hash
-			URI "#{self}?#{URI.encode_www_form(params)}"
+			URI "#{self}?#{URI.encode_www_form(query)}"
 		else
 			raise "Cannot convert to URI"
 		end # case

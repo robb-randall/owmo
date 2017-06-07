@@ -1,5 +1,3 @@
-require 'ext/Net'
-require 'ext/String'
 require "owmo/version"
 require "owmo/Weather"
 
@@ -13,12 +11,13 @@ module OWMO
     extended: 'forecast/daily' # 16 day / daily forecast
   }
 
-  LOCATIONS = [
-    "q", # City Name
-    "id", # City ID
-    "zip", # Zip
-    ["lat", "lon"] # Coord
-  ]
+  GEOCODE = {
+    q: [:q, :city_name],
+    id: [:id, :city_id],
+    zip: [:zip, :zip_code],
+    lat: [:lat, :latitude],
+    lon: [:lon, :longitude]
+  }
 
   FORMATS = {
     json: {mode: "json"},
@@ -27,7 +26,7 @@ module OWMO
   }
 
   UNITS = {
-    kelvin: {},
+    kelvin: nil,
     imperial: {units: 'imperial'},
     metric: {units: 'metric'}
   }
