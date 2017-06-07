@@ -1,5 +1,8 @@
 require 'owmo'
 
+=begin rdoc
+An example on how to get current conditions and use the different parameters.
+=end
 api_key = ""
 
 OWMO::weather api_key: api_key do |weather|

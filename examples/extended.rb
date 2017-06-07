@@ -1,5 +1,9 @@
 require 'owmo'
 
+
+=begin rdoc
+An example on how to get the weather forcast and use the different parameters.
+=end
 api_key = ""
 
 OWMO::weather api_key: api_key do |weather|
