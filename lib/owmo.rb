@@ -1,5 +1,5 @@
 require "owmo/version"
-require "owmo/Weather"
+require "owmo/weather"
 
 =begin rdoc
 OMWO = OpenWeatherMap.org client for current and forecasted weather conditions.

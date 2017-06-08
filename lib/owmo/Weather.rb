@@ -1,5 +1,5 @@
-require 'ext/Net'
-require 'ext/String'
+require 'ext/net'
+require 'ext/string'
 require 'set'
 
 
