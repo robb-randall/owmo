@@ -39,7 +39,7 @@ Sends the GET request to OpenWeatherMap.org, and returns the response
       end # response
 
       # Check the response
-      raise OWMO::API::WeatherResponseError.new(response) if response.weather_code != 200
+      raise OWMO::API::WeatherResponseError.new(response) unless response.weather_code == 200
 
       return response.weather
 

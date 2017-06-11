@@ -1,3 +1,6 @@
+require 'json'
+
+
 module CoreExtensions
   module Net
     module HTTPResponse
@@ -22,7 +25,7 @@ Returns the response code
         public
         def weather_code
           parse_weather
-          return @weather[:cod].to_i if @weather.is_a? Hash
+          return @weather['cod'].to_i if @weather.is_a? Hash
           200
         end # weather_error
 
@@ -32,7 +35,8 @@ Returns the response message
         public
         def weather_message
           parse_weather
-          return @weather[:message] if @weather.is_a? Hash
+          return @weather['message'] if @weather.is_a? Hash
+          ""
         end # weather_message
 
 =begin rdoc
