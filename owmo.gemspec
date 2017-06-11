@@ -5,7 +5,7 @@ require 'owmo/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "owmo"
-  spec.version       = Owmo::VERSION
+  spec.version       = OWMO::VERSION
   spec.authors       = ["Robb"]
   spec.email         = ["robb.randall@gmail.com"]
 
