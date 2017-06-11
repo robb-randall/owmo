@@ -48,6 +48,14 @@ Access current or forecasted conditions by (required):
     "Coordinance" => {
       query: [:lat, :lon],
       options: [[:lat, :lon], [:lattitude, :longitude]]
+    },
+    "Cities Within a Rectangle Zone" => {
+      query: :bbox,
+      options: [:bbox]
+    },
+    "Cities Within a Circle" => {
+      query: [:lat, :lon, :cnt],
+      options: [[:lat, :lon, :cnt],[:lattitude, :longitude, :cnt]]
     }
   }
 
