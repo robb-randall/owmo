@@ -1,5 +1,7 @@
+require "owmo/api"
 require "owmo/version"
 require "owmo/weather"
+
 
 =begin rdoc
 OMWO = OpenWeatherMap.org client for current and forecasted weather conditions.
@@ -28,33 +30,25 @@ Access current or forecasted conditions by (required):
 * +q:+ or +city_name:+ - By city name
 * +id:+ or +city_id:+ - By city ID
 * +zip:+ or +zip_code:+ - By zip code
-* +lat:+ or +latitude:+ - By geographic coordinates
-* +lon:+ or +longitude:+ - By geographic coordinates
+* +lat:+, +lon:+ or +latitude:+, +longitude:+ - By geographic coordinates
 =end
-  GEOCODE = {
-    q: [:q, :city_name],
-    id: [:id, :city_id],
-    zip: [:zip, :zip_code],
-    lat: [:lat, :latitude],
-    lon: [:lon, :longitude]
-  }
-
-=begin rdoc
-{Weather response format:}[http://openweathermap.org/current#parameter]
-=end
-  RESPOND_FORMATS = {
-    json: {mode: "json"},
-    xml: {mode: "xml"},
-    html:  {mode: "html"}
-  }
-
-=begin rdoc
-{Weather units format:}[http://openweathermap.org/current#data]
-=end
-  UNITS = {
-    kelvin: "",
-    imperial: {units: 'imperial'},
-    metric: {units: 'metric'}
+  GEOCODES = {
+    "City Name" => {
+      query: :q,
+      options: [:q, :city_name]
+    },
+    "City ID" => {
+      query: :id,
+      options: [:id, :city_id]
+    },
+    "Zip Code" => {
+      query: :zip,
+      options: [:zip, :zip_code]
+    },
+    "Coordinance" => {
+      query: [:lat, :lon],
+      options: [[:lat, :lon], [:lattitude, :longitude]]
+    }
   }
 
 =begin rdoc
