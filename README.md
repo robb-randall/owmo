@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-You'll need and API key from OpenWeatherMap.org (http://openweathermap.org/appid).
+You'll need and API key from [OpenWeatherMap.org](http://openweathermap.org/appid).
 
 Compelete examples can be found under owmo/examples.
 
@@ -45,18 +45,23 @@ end
 ```
 ----
 ### Weather Information
-#### Current weather data (http://openweathermap.org/current)
+#### [Current weather data](http://openweathermap.org/current)
 ```ruby
 puts weather.get :current, city_name: "London,UK"
 ```
-#### 5 day weather forecast (http://openweathermap.org/forecast5)
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/current.rb)
+
+#### [5 day weather forecast](http://openweathermap.org/forecast5)
 ```ruby
 puts weather.get :forecast5, city_name: "London,UK"
 ```
-#### 16 day weather forecast (http://openweathermap.org/forecast16)
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/forecast5.rb)
+
+#### [16 day weather forecast](http://openweathermap.org/forecast16)
 ```ruby
 puts weather.get :forecast16, city_name: "London,UK"
 ```
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/forecast16.rb)
 
 ----
 ### Query parameters
@@ -78,6 +83,7 @@ puts weather.get :current, zip_code: 90210
 # Geocode by Coordinance
 puts weather.get :current, lon: -118.41, lat: 34.09
 ```
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/query_geocode.rb)
 
 #### Mode
 ```ruby
@@ -91,6 +97,7 @@ puts weather.get :current, city_name: "London,UK", mode: :xml
 # Response in HTML format
 puts weather.get :current, city_name: "London,UK", mode: :html
 ```
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/query_mode.rb)
 
 #### Units
 ```ruby
@@ -103,6 +110,7 @@ puts weather.get :current, city_name: "London,UK", units: :imperial
 # Metric
 puts weather.get :current, city_name: "London,UK", units: :metric
 ```
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/query_units.rb)
 
 #### All
 ```ruby
@@ -115,6 +123,25 @@ query = {
 
 puts weather.get :current, query
 ```
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/query_all.rb)
+
+----
+### Wroking example using Sinatra
+
+```ruby
+require 'owmo'
+require 'sinatra' # Need to install, not included in gemspec
+require 'uri'
+
+get '/current/:name' do
+    api_key = '<API Key>'
+    weather = OWMO::Weather.new api_key
+    weather.get :current, city_name: params[:name], mode: :html
+end
+```
+
+Then navigate to: http://localhost:4567/current/London,UK
+[Full example](https://github.com/robb-randall/owmo/blob/master/examples/sinatra_example.rb)
 
 ----
 ## Development
