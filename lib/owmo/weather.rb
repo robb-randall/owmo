@@ -16,14 +16,53 @@ A weather class for retrieving current and forecasted weather conditions.
 =end
   class Weather
 
+    attr_reader :api_key, :Paths, :Geocodes
+
 =begin rdoc
-Raised when missing OpenWeatherMap.org API key
+Access current or forecasted conditions by (required):
+* +:current+ - {Current weather data}[http://openweathermap.org/current]
+* +:forecast5+ - {5 day / 3 hour forecast}[http://openweathermap.org/forecast5]
+* +:forecast16+ - {16 day / daily forecast}[http://openweathermap.org/forecast16]
 =end
-    class MissingApiKey < StandardError
-      def initialize()
-        super("Missing OpenWeatherMap.org API key, please register for one here -> http://openweathermap.org/appid")
-      end # initialize
-    end # MissingApiKey
+    Paths = {
+      current: 'weather', # Current weather data
+      forecast5: 'forecast', # 5 day / 3 hour forecast
+      forecast16: 'forecast/daily' # 16 day / daily forecast
+    }
+
+=begin rdoc
+{Geocode options (required):}[http://openweathermap.org/current#one]
+* +q:+ or +city_name:+ - By city name
+* +id:+ or +city_id:+ - By city ID
+* +zip:+ or +zip_code:+ - By zip code
+* +lat:+, +lon:+ or +latitude:+, +longitude:+ - By geographic coordinates
+=end
+    Geocodes = {
+      "City Name" => {
+        query: :q,
+        options: [:q, :city_name]
+      },
+      "City ID" => {
+        query: :id,
+        options: [:id, :city_id]
+      },
+      "Zip Code" => {
+        query: :zip,
+        options: [:zip, :zip_code]
+      },
+      "Coordinance" => {
+        query: [:lat, :lon],
+        options: [[:lat, :lon], [:lattitude, :longitude]]
+      },
+      "Cities Within a Rectangle Zone" => {
+        query: :bbox,
+        options: [:bbox]
+      },
+      "Cities Within a Circle" => {
+        query: [:lat, :lon, :cnt],
+        options: [[:lat, :lon, :cnt],[:lattitude, :longitude, :cnt]]
+      }
+    }
 
 =begin rdoc
 Invalid path specified
@@ -31,7 +70,7 @@ Invalid path specified
     class InvalidPathSpecified < StandardError
       def initialize(path=nil)
         @path = path
-        super("Invalid path specified: Got: '#{@path}', expected one of: #{OWMO::PATHS.keys}")
+        super("Invalid path specified: Got: '#{@path}', expected one of: #{Paths.keys}")
       end # initialize
     end # NoGeocodeSpecified
 
@@ -41,20 +80,15 @@ Missing Geocode from query
     class MissingGeocodes < StandardError
     end # MissingGeocodes
 
-=begin rdoc
-{OpenWeatherMap.org API key}[http://openweathermap.org/appid]
-=end
-    attr_reader :api_key
 
-    def initialize(**kwargs) #:notnew:
-      raise MissingApiKey if kwargs[:api_key].nil?
-      @api_key = kwargs[:api_key]
+    def initialize(api_key, **kwargs) #:notnew:
+      @api_key = api_key
     end # initialize
 
 =begin rdoc
 A weather class for retrieving current and forecasted weather conditions.
 ==== Attributes
-* +path+ - OWMO::PATH parameter
+* +path+ - OWMO::Wether.Path parameter
 * +query+ - Hash of query options (Geocode, response format, units, etc.)
 ==== Examples
   api_key = "<My API Key>"
@@ -67,11 +101,11 @@ A weather class for retrieving current and forecasted weather conditions.
       query = check_geocodes query
 
       # Add the api key
-      query[:APPID] = @api_key if query[:APPID].nil?
+      query[:APPID] = @api_key
 
       # Create the uri
-      raise InvalidPathSpecified.new(path) if OWMO::PATHS[path].nil?
-      uri = URI "#{OWMO::URL}/#{OWMO::PATHS[path]}?#{URI.encode_www_form(query)}"
+      raise InvalidPathSpecified.new(path) if Paths[path].nil?
+      uri = URI "#{OWMO::URL}/#{Paths[path]}?#{URI.encode_www_form(query)}"
 
       # Get the weather data
       OWMO::API.get(uri)
@@ -86,7 +120,7 @@ Ensure appropriate query options are applied to the final URI
     # May never be called since query is required
     raise MissingGeocodes if query.size == 0
 
-    GEOCODES.each do |name, geocodes|
+    Geocodes.each do |name, geocodes|
 
       # Get the common keys
       intersect = geocodes[:options].flatten & query.keys
