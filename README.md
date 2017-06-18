@@ -32,55 +32,91 @@ Compelete examples can be found under owmo/examples.
 ```ruby
 require 'owmo'
 api_key = "<api key here>"
-weather = OWMO::Weather.new api_key: api_key
-puts weather.get :current, zip: 52402
+weather = OWMO::Weather.new api_key
+puts weather.get :current, city_name: "London,UK"
 ```
 
 ```ruby
 require 'owmo'
 api_key = "<api key here>"
-OWMO::weather api_key: api_key do |weather|
-    puts weather.get :forecast, zip: 52402
+OWMO::weather api_key do |weather|
+    puts weather.get :forecast, city_name: "London,UK"
 end
 ```
 ----
-
-### Current weather data (http://openweathermap.org/current)
+### Weather Information
+#### Current weather data (http://openweathermap.org/current)
 ```ruby
-  params = {
-    city_name: "London,uk", # [city_name, city_id, zip, lat/lon]
-    mode: 'json', # [json, xml, html] Not required, but an option
-    units: 'imperial', # [imperial, metric] Not required, but an option
-    lang: 'en_US' # Not required, but an option
-  }
-
-  puts weather.get :current, params
-
+puts weather.get :current, city_name: "London,UK"
 ```
-### 5 day weather forecast (http://openweathermap.org/forecast5)
+#### 5 day weather forecast (http://openweathermap.org/forecast5)
 ```ruby
-  params = {
-    zip: "90210", # [city_name, city_id, zip, lat/lon]
-    mode: 'json', # [json, xml, html] Not required, but an option
-    units: 'imperial', # [imperial, metric] Not required, but an option
-    lang: 'en_US' # Not required, but an option
-  }
-
-  puts weather.get :forecast, params
+puts weather.get :forecast5, city_name: "London,UK"
+```
+#### 16 day weather forecast (http://openweathermap.org/forecast16)
+```ruby
+puts weather.get :forecast16, city_name: "London,UK"
 ```
 
-### 16 day weather forecast (http://openweathermap.org/forecast16)
-```ruby
-  params = {
-    lat: "40.7128", lon: "74.0059",  # [city_name, city_id, zip, lat/lon]
-    mode: 'json', # [json, xml, html] Not required, but an option
-    units: 'imperial', # [imperial, metric] Not required, but an option
-    lang: 'en_US' # Not required, but an option
-  }
+----
+### Query parameters
 
-  puts weather.get :extended, params
+#### Geocode (required)
+```ruby
+# Geocode by City ID
+puts weather.get :current, city_id: 5328041
+puts weather.get :current, id: 5328041
+
+# Geocode by City Name
+puts weather.get :current, city_name: "Beverly Hills"
+puts weather.get :current, q: "Beverly Hills"
+
+# Geocode by Zip Code
+puts weather.get :current, zip: 90210
+puts weather.get :current, zip_code: 90210
+
+# Geocode by Coordinance
+puts weather.get :current, lon: -118.41, lat: 34.09
 ```
 
+#### Mode
+```ruby
+# Response in JSON format (default)
+puts weather.get :current, city_name: "London,UK"
+puts weather.get :current, city_name: "London,UK", mode: :json
+
+# Response in XML format
+puts weather.get :current, city_name: "London,UK", mode: :xml
+
+# Response in HTML format
+puts weather.get :current, city_name: "London,UK", mode: :html
+```
+
+#### Units
+```ruby
+# Kelvin (default)
+puts weather.get :current, city_name: "London,UK"
+
+# Imperial
+puts weather.get :current, city_name: "London,UK", units: :imperial
+
+# Metric
+puts weather.get :current, city_name: "London,UK", units: :metric
+```
+
+#### All
+```ruby
+query = {
+  city_name: "London,UK",
+  mode: 'json',
+  units: 'imperial',
+  lang: 'fr'
+}
+
+puts weather.get :current, query
+```
+
+----
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
