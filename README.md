@@ -141,6 +141,7 @@ end
 ```
 
 Then navigate to: http://localhost:4567/current/London,UK
+
 [Full example](https://github.com/robb-randall/owmo/blob/master/examples/sinatra_example.rb)
 
 ----
