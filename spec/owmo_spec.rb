@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe Owmo do
   it "has a version number" do
-    expect(Owmo::VERSION).not_to be nil
+    expect(OWMO::VERSION).not_to be nil
   end
 
   it "does something useful" do
