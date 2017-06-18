@@ -1,4 +1,7 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in owmo.gemspec
+gem 'net/http'
+gem 'set'
+gem 'uri'
+
 gemspec
