@@ -25,8 +25,7 @@ Yield a weather object for querying weather data
 =end
   public
   def self.weather(api_key, **params)
-    weather = Weather.new api_key, params
-    yield weather
+    yield Weather.new api_key, params
   end # weather
 
 end # OWMO

@@ -1,4 +1,6 @@
 require 'core_extensions/net/http_response/weather_response'
+require 'owmo/api/exceptions'
+
 require 'net/http'
 require 'uri'
 
@@ -9,20 +11,12 @@ Include some weather response info into Net::HTTPResponse
 Net::HTTPResponse.include CoreExtensions::Net::HTTPResponse::WeatherResponse
 
 module OWMO
+
 =begin rdoc
 Net module Mixins
 =end
   module API
-
-=begin rdoc
-Weather response error to handle errors received from OpenWeatherMap.orgs API
-=end
-    class WeatherResponseError < StandardError
-      def initialize(response)
-        @response = response
-        super("ERROR #{@response.weather_code}: #{@response.weather_message}")
-      end # initialize
-    end # WeatherResponseError
+    include ApiExceptions
 
 =begin rdoc
 Sends the GET request to OpenWeatherMap.org, and returns the response
@@ -39,7 +33,7 @@ Sends the GET request to OpenWeatherMap.org, and returns the response
       end # response
 
       # Check the response
-      raise OWMO::API::WeatherResponseError.new(response) unless response.weather_code == 200
+      raise OWMO::API::WeatherResponseError.new(response) if response.has_error?
 
       return response.weather
 

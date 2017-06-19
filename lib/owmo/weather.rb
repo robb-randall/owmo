@@ -1,3 +1,5 @@
+require 'owmo/weather/exceptions'
+
 require 'set'
 require 'uri'
 
@@ -15,6 +17,7 @@ A weather class for retrieving current and forecasted weather conditions.
 
 =end
   class Weather
+    include WeatherExceptions
 
     attr_reader :api_key, :Paths, :Geocodes
 
@@ -63,23 +66,6 @@ Access current or forecasted conditions by (required):
         options: [[:lat, :lon, :cnt],[:lattitude, :longitude, :cnt]]
       }
     }
-
-=begin rdoc
-Invalid path specified
-=end
-    class InvalidPathSpecified < StandardError
-      def initialize(path=nil)
-        @path = path
-        super("Invalid path specified: Got: '#{@path}', expected one of: #{Paths.keys}")
-      end # initialize
-    end # NoGeocodeSpecified
-
-=begin rdoc
-Missing Geocode from query
-=end
-    class MissingGeocodes < StandardError
-    end # MissingGeocodes
-
 
     def initialize(api_key, **kwargs) #:notnew:
       @api_key = api_key

@@ -40,6 +40,14 @@ Returns the response message
         end # weather_message
 
 =begin rdoc
+Returns boolean if the response contains an error or not.
+=end
+        public
+        def has_error?
+          weather_code != 200
+        end # has_error?
+
+=begin rdoc
 Attempts to parse the body to JSON.  This is so we don't have to continually
 parse the raw JSON.
 =end
