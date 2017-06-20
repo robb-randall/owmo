@@ -1,4 +1,6 @@
 module WeatherParameters
+  attr_reader :Paths, :Geocodes
+
 =begin rdoc
 Access current or forecasted conditions by (required):
 * +:current+ - {Current weather data}[http://openweathermap.org/current]
@@ -6,6 +8,7 @@ Access current or forecasted conditions by (required):
 * +:forecast16+ - {16 day / daily forecast}[http://openweathermap.org/forecast16]
 =end
   Paths = {
+    group: 'group', # Current weather w/multiple IDs
     current: 'weather', # Current weather data
     forecast5: 'forecast', # 5 day / 3 hour forecast
     forecast16: 'forecast/daily' # 16 day / daily forecast

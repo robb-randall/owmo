@@ -33,7 +33,7 @@ Sends the GET request to OpenWeatherMap.org, and returns the response
     end # response
 
     # Check the response
-    raise OWMO::API::WeatherResponseError.new(response) if response.has_error?
+    raise WeatherResponseError.new(response) if response.has_error?
 
     return response.weather
 

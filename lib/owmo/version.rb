@@ -3,6 +3,6 @@ module OWMO
 =begin rdoc
 Gem Version
 =end
-  VERSION = "1.1.0"
+  VERSION = "1.2.0"
 
 end # OWMO

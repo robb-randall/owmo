@@ -19,11 +19,11 @@ A weather class for retrieving current and forecasted weather conditions.
 
 =end
   class Weather
+    include WeatherAPI
     include WeatherExceptions
     include WeatherParameters
-    include WeatherAPI
 
-    attr_reader :api_key, :Paths, :Geocodes
+    attr_reader :api_key
 
     def initialize(api_key, **kwargs) #:notnew:
       @api_key = api_key
@@ -51,7 +51,7 @@ A weather class for retrieving current and forecasted weather conditions.
 
       # Create the uri
       raise InvalidPathSpecified.new(path) if Paths[path].nil?
-      uri = URI "#{OWMO::URL}/#{Paths[path]}?#{URI.encode_www_form(query)}"
+      uri = URI "#{OWMO::URL}/#{Paths[path]}?#{URI.encode_www_form(query).gsub('%2C', ',')}"
 
       # Get the weather data
       get_weather(uri)
@@ -63,7 +63,7 @@ Ensure appropriate query options are applied to the final URI
 =end
   def check_geocodes(**query)
 
-    # May never be called since query is required
+    # May never be called since query is requiredcity_name
     raise MissingGeocodes if query.size == 0
 
     Geocodes.each do |name, geocodes|

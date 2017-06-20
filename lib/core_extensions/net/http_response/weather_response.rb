@@ -25,7 +25,7 @@ Returns the response code
         public
         def weather_code
           parse_weather
-          return @weather['cod'].to_i if @weather.is_a? Hash
+          return (@weather['cod'] || "200").to_i if @weather.is_a? Hash
           200
         end # weather_error
 

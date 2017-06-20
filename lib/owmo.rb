@@ -31,7 +31,7 @@ Yield a weather object for querying weather data
       yield weather
     else
       return weather
-    end
+    end # if
   end # weather
 
 end # OWMO
