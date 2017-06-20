@@ -42,7 +42,7 @@ RSpec.describe OWMO::Weather do
     }
 
     context ':group' do
-      context 'multiple ids' do
+      context 'city ids' do
         it 'by :id' do
           data = weather.get :group, id: params[:cities].join(',')
           expect(data['cnt']).to eq(params[:cities].size)
