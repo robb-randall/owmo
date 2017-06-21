@@ -82,36 +82,36 @@ A weather class for retrieving current and forecasted weather conditions.
 =begin rdoc
 Ensure appropriate query options are applied to the final URI
 =end
-  private
-  def alias_geocodes(**query)
+    private
+    def alias_geocodes(**query)
 
-    # May never be called since query is requiredcity_name
-    raise MissingGeocodes if query.size == 0
+      # May never be called since query is requiredcity_name
+      raise MissingGeocodes if query.size == 0
 
-    Geocodes.each do |name, geocodes|
+      Geocodes.each do |name, geocodes|
 
-      # Get the common keys
-      intersect = geocodes[:options].flatten & query.keys
+        # Get the common keys
+        intersect = geocodes[:options].flatten & query.keys
 
-      # If there are common keys
-      if intersect.size > 0 then
+        # If there are common keys
+        if intersect.size > 0 then
 
-        # Remap any keys if they are not the same as the query
-        case geocodes[:query]
-        when Array then
-          intersect.zip(geocodes[:query]).each do |old_key, new_key|
-            query[new_key] = query.delete(old_key) unless new_key == old_key
+          # Remap any keys if they are not the same as the query
+          case geocodes[:query]
+          when Array then
+            intersect.zip(geocodes[:query]).each do |old_key, new_key|
+              query[new_key] = query.delete(old_key) unless new_key == old_key
+            end
+          else
+            query[geocodes[:query]] = query.delete(intersect[0]) unless geocodes[:query] == intersect[0]
           end
-        else
-          query[geocodes[:query]] = query.delete(intersect[0]) unless geocodes[:query] == intersect[0]
+
+          return query
         end
-
-        return query
       end
-    end
 
-    raise MissingGeocodes
-  end
+      raise MissingGeocodes
+    end
 
   end
 end
