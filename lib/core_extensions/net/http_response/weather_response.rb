@@ -5,11 +5,6 @@ module CoreExtensions
   module Net
     module HTTPResponse
       module WeatherResponse
-=begin rdoc
-Contains the weather data.  If it's JSON, then it'll be a hash, other forms (XML, HTML)
-will be raw format.  The raw JSON is also available using the self.body.
-=end
-        attr_reader :weather
 
 =begin rdoc
 Returns the weather

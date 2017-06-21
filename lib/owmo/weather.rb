@@ -1,10 +1,15 @@
-require 'owmo/api'
+require 'core_extensions/net/http_response/weather_response'
 require 'owmo/weather/exceptions'
-require 'owmo/weather/parameters'
+require 'owmo/weather/attributes'
 
+require 'net/http'
 require 'set'
 require 'uri'
 
+=begin rdoc
+Include some weather response info into Net::HTTPResponse
+=end
+Net::HTTPResponse.include CoreExtensions::Net::HTTPResponse::WeatherResponse
 
 module OWMO
 
@@ -19,9 +24,8 @@ A weather class for retrieving current and forecasted weather conditions.
 
 =end
   class Weather
-    include WeatherAPI
     include WeatherExceptions
-    include WeatherParameters
+    include WeatherAttributes
 
     attr_reader :api_key
 
@@ -44,7 +48,7 @@ A weather class for retrieving current and forecasted weather conditions.
     public
     def get(path, **query)
       # Format Geocode info
-      query = check_geocodes query
+      query = alias_geocodes query
 
       # Add the api key
       query[:APPID] = @api_key
@@ -54,14 +58,23 @@ A weather class for retrieving current and forecasted weather conditions.
       uri = URI "#{OWMO::URL}/#{Paths[path]}?#{URI.encode_www_form(query).gsub('%2C', ',')}"
 
       # Get the weather data
-      get_weather(uri)
+      request = Net::HTTP::Get.new(uri)
+
+      response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+        http.request(request)
+      end # response
+
+      # Check the response
+      raise WeatherResponseError.new(response) if response.has_error?
+
+      response.weather
 
     end # get
 
 =begin rdoc
 Ensure appropriate query options are applied to the final URI
 =end
-  def check_geocodes(**query)
+  def alias_geocodes(**query)
 
     # May never be called since query is requiredcity_name
     raise MissingGeocodes if query.size == 0
@@ -90,7 +103,7 @@ Ensure appropriate query options are applied to the final URI
     end # GEOCODES
 
     raise MissingGeocodes
-  end # check_geocodes
+  end # alias_geocodes
 
   end # Weather
 end # OWMO

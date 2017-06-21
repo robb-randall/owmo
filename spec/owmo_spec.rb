@@ -37,7 +37,9 @@ RSpec.describe OWMO::Weather do
         zip: 52401,
         lat: 42.01,
         lon: -91.64,
-        cities: [4850751,4887398,2643743,4164138,5368361]
+        circle: {lat: 55.5, lon: 37.5, cnt: 10},
+        cities: [4850751,4887398,2643743,4164138,5368361],
+        box: [12, 32, 15, 37, 10]
       }
     }
 
@@ -50,6 +52,24 @@ RSpec.describe OWMO::Weather do
         it 'by :city_id' do
           data = weather.get :group, city_id: params[:cities].join(',')
           expect(data['cnt']).to eq(params[:cities].size)
+        end
+      end
+    end
+
+    context ':box' do
+      context 'box' do
+        it 'by :bbox' do
+          data = weather.get :box, bbox: params[:box].join(',')
+          expect(data['cnt']).to eq(15)
+        end
+      end
+    end
+
+    context ':circle' do
+      context 'circle' do
+        it 'by :lat, :lon, :cnt' do
+          data = weather.get :circle, params[:circle]
+          expect(data['count']).to eq(10)
         end
       end
     end

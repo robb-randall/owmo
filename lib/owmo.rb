@@ -1,4 +1,3 @@
-require "owmo/api"
 require "owmo/version"
 require "owmo/weather"
 
