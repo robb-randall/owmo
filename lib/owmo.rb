@@ -17,9 +17,15 @@ Yield a weather object for querying weather data
 ==== Attributes
 * +api_key:+ - {OpenWeatherMap.org API key}[http://openweathermap.org/appid]
 ==== Examples
-  api_key = "<My API Key>"
-  OWMO::weather api_key do |weather|
-    puts weather.get :current, city_name: "London,uk"
+* Single request:
+  api_key = ''
+  OWMO::weather(api_key).get :current, city_name: "London,UK"
+* Muliple requests:
+  api_key = ''
+  OWMO::weather(api_key) do |weather|
+    puts weather.get :current, city_name: "London,UK"
+    puts weather.get :forecast5, city_name: "London,UK"
+    puts weather.get :forecast16, city_name: "London,UK"
   end
 =end
   public
@@ -30,7 +36,7 @@ Yield a weather object for querying weather data
       yield weather
     else
       return weather
-    end # if
-  end # weather
+    end
+  end
 
-end # OWMO
+end

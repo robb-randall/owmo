@@ -17,27 +17,24 @@ Returns the weather
 =begin rdoc
 Returns the response code
 =end
-        public
         def weather_code
           parse_weather
           return (@weather['cod'] || "200").to_i if @weather.is_a? Hash
           200
-        end # weather_error
+        end
 
 =begin rdoc
 Returns the response message
 =end
-        public
         def weather_message
           parse_weather
           return @weather['message'] if @weather.is_a? Hash
           ""
-        end # weather_message
+        end
 
 =begin rdoc
 Returns boolean if the response contains an error or not.
 =end
-        public
         def has_error?
           weather_code != 200
         end # has_error?

@@ -1,5 +1,4 @@
 module WeatherAttributes
-  attr_reader :Paths, :Geocodes
 
 =begin rdoc
 Access current or forecasted conditions by (required):
@@ -50,4 +49,4 @@ Access current or forecasted conditions by (required):
     }
   }
 
-end # WeatherAttributes
+end
