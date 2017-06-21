@@ -12,7 +12,7 @@ Returns the weather
         def weather
           parse_weather
           @weather
-        end # weather
+        end
 
 =begin rdoc
 Returns the response code
@@ -29,7 +29,7 @@ Returns the response message
         def weather_message
           parse_weather
           return @weather['message'] if @weather.is_a? Hash
-          ""
+          "none"
         end
 
 =begin rdoc
@@ -37,7 +37,7 @@ Returns boolean if the response contains an error or not.
 =end
         def has_error?
           weather_code != 200
-        end # has_error?
+        end
 
 =begin rdoc
 Attempts to parse the body to JSON.  This is so we don't have to continually
@@ -50,9 +50,9 @@ parse the raw JSON.
           rescue
             @weather = self.body
           end if @weather.nil?
-        end # parse_weather
+        end
 
-      end # WeatherResponse
-    end # HTTPResponse
-  end # Net
-end # CoreExtensions
+      end
+    end
+  end
+end

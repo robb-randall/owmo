@@ -2,9 +2,6 @@ module WeatherAttributes
 
 =begin rdoc
 Access current or forecasted conditions by (required):
-* +:current+ - {Current weather data}[http://openweathermap.org/current]
-* +:forecast5+ - {5 day / 3 hour forecast}[http://openweathermap.org/forecast5]
-* +:forecast16+ - {16 day / daily forecast}[http://openweathermap.org/forecast16]
 =end
   Paths = {
     current: 'weather', # Current weather data
@@ -17,10 +14,6 @@ Access current or forecasted conditions by (required):
 
 =begin rdoc
 {Geocode options (required):}[http://openweathermap.org/current#one]
-* +q:+ or +city_name:+ - By city name
-* +id:+ or +city_id:+ - By city ID
-* +zip:+ or +zip_code:+ - By zip code
-* +lat:+, +lon:+ or +latitude:+, +longitude:+ - By geographic coordinates
 =end
   Geocodes = {
     "City Name" => {

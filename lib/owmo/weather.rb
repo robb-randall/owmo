@@ -1,5 +1,4 @@
 require 'net/http'
-require 'set'
 require 'uri'
 
 require 'core_extensions/net/http_response/weather_response'
@@ -57,6 +56,9 @@ A weather class for retrieving current and forecasted weather conditions.
 =end
     public
     def get(path=nil, query={})
+      # Ensure the path specified is valid
+      raise InvalidPathSpecified.new(path) if Paths[path].nil?
+
       # Format Geocode info
       query = alias_geocodes query
 
@@ -64,13 +66,11 @@ A weather class for retrieving current and forecasted weather conditions.
       query[:APPID] = @api_key
 
       # Create the uri
-      raise InvalidPathSpecified.new(path) if Paths[path].nil?
       uri = URI "#{OWMO::URL}/#{Paths[path]}?#{URI.encode_www_form(query).gsub('%2C', ',')}"
 
       # Get the weather data
-      request = Net::HTTP::Get.new(uri)
       response = Net::HTTP.start(uri.hostname, uri.port) do |http|
-        http.request(request)
+        http.request(Net::HTTP::Get.new(uri))
       end # response
 
       # Check the response
