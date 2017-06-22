@@ -1,5 +1,5 @@
 require 'net/http'
-
+require 'time'
 require 'core_extensions/net/http_response/weather_response'
 
 
@@ -52,7 +52,7 @@ Access current or forecasted conditions by (required):
 =begin rdoc
 Geocode aliases
 =end
-    Aliases = {
+    Geocode_Aliases = {
       city_name: :q,
       city_id: :id,
       zip_code: :zip,
@@ -94,6 +94,8 @@ A weather class for retrieving current and forecasted weather conditions.
 =end
     public
     def get(path, **query)
+      log "Starting request= #{path} -> #{query}"
+      start = Time.now
 
       # Format Geocode info
       query = alias_geocodes(query)
@@ -105,8 +107,12 @@ A weather class for retrieving current and forecasted weather conditions.
       uri = format_uri(OWMO::URL, Paths[path], query)
 
       # Get the weather data
-      send_request(uri).weather
+      weather = GET(uri)
 
+      elapsed_sec = (Time.now - start).round 5
+      log "Request completed in #{elapsed_sec} seconds."
+
+      weather
     end
 
 =begin rdoc
@@ -117,7 +123,9 @@ easier to read than :q
     def alias_geocodes(**query)
       log "Query before= #{query}"
 
-      (query.keys & Aliases.keys).each { |key| query[Aliases[key]] = query.delete(key) }
+      (query.keys & Geocode_Aliases.keys).each do |key|
+        query[Geocode_Aliases[key]] = query.delete(key)
+      end
 
       log "Query after= #{query}"
       query
@@ -137,7 +145,7 @@ Formats the url with the given url, path, and query
 Sends the GET request to OpenWeatherMap.org
 =end
     private
-    def send_request(uri)
+    def GET(uri)
       log "Starting GET request"
       response = Net::HTTP.start(uri.hostname, uri.port) do |http|
         http.request(Net::HTTP::Get.new(uri))
@@ -146,7 +154,8 @@ Sends the GET request to OpenWeatherMap.org
 
       # Check the response
       raise WeatherResponseError.new(response) if response.has_error?
-      response
+
+      response.weather
     end
 
 =begin rdoc
