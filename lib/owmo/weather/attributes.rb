@@ -13,33 +13,14 @@ Access current or forecasted conditions by (required):
   }
 
 =begin rdoc
-{Geocode options (required):}[http://openweathermap.org/current#one]
+Geocode aliases
 =end
-  Geocodes = {
-    "City Name" => {
-      query: :q,
-      options: [:q, :city_name]
-    },
-    "City ID" => {
-      query: :id,
-      options: [:id, :city_id]
-    },
-    "Zip Code" => {
-      query: :zip,
-      options: [:zip, :zip_code]
-    },
-    "Coordinance" => {
-      query: [:lat, :lon],
-      options: [[:lat, :lon], [:lattitude, :longitude]]
-    },
-    "Cities Within a Rectangle Zone" => {
-      query: :bbox,
-      options: [:bbox]
-    },
-    "Cities Within a Circle" => {
-      query: [:lat, :lon, :cnt],
-      options: [[:lat, :lon, :cnt],[:lattitude, :longitude, :cnt]]
-    }
+  Aliases = {
+    city_name: :q,
+    city_id: :id,
+    zip_code: :zip,
+    latitude: :lat,
+    longitude: :lon
   }
 
 end

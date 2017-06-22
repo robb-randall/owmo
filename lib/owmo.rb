@@ -30,12 +30,12 @@ Yield a weather object for querying weather data
 =end
   public
   def self.weather(api_key, **params)
-    weather = Weather.new(api_key, params)
-
-    if block_given?
-      yield weather
-    else
-      return weather
+    Weather.new(api_key, params) do |weather|
+      if block_given?
+        yield weather
+      else
+        return weather
+      end
     end
   end
 
