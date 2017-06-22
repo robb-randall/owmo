@@ -1,8 +1,6 @@
 require 'net/http'
 
 require 'core_extensions/net/http_response/weather_response'
-require 'owmo/weather/attributes'
-require 'owmo/weather/exceptions'
 
 
 =begin rdoc
@@ -23,13 +21,44 @@ A weather class for retrieving current and forecasted weather conditions.
   puts weather.get :current, city_name: "London,uk"
 =end
   class Weather
-    include WeatherAttributes
-    include WeatherExceptions
+
+=begin rdoc
+Weather response error to handle errors received from OpenWeatherMap.orgs API
+=end
+    class WeatherResponseError < StandardError
+      def initialize(response)
+        @response = response
+        super("ERROR #{@response.weather_code}: #{@response.weather_message}")
+      end
+    end
 
 =begin rdoc
 OpenWeatherMap.Org weather API key
 =end
     attr_reader :api_key
+
+=begin rdoc
+Access current or forecasted conditions by (required):
+=end
+    Paths = {
+      current: 'weather', # Current weather data
+      group: 'group', # Current weather w/multiple IDs
+      box: 'box/city', # Current weather w/in a rectangle box
+      circle: 'find', # Current weather w/in a circle
+      forecast5: 'forecast', # 5 day / 3 hour forecast
+      forecast16: 'forecast/daily' # 16 day / daily forecast
+    }
+
+=begin rdoc
+Geocode aliases
+=end
+    Aliases = {
+      city_name: :q,
+      city_id: :id,
+      zip_code: :zip,
+      latitude: :lat,
+      longitude: :lon
+    }
 
 =begin rdoc
 Either yeild the class, or instanciate it.
@@ -87,8 +116,9 @@ easier to read than :q
     private
     def alias_geocodes(**query)
       log "Query before= #{query}"
-      intersect = query.keys & Aliases.keys
-      intersect.each { |key| query[Aliases[key]] = query.delete(key) }
+
+      (query.keys & Aliases.keys).each { |key| query[Aliases[key]] = query.delete(key) }
+
       log "Query after= #{query}"
       query
     end
