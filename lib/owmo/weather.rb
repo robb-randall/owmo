@@ -1,5 +1,6 @@
+require 'logger'
 require 'net/http'
-require 'time'
+
 require 'core_extensions/net/http_response/weather_response'
 
 
@@ -57,7 +58,8 @@ Geocode aliases
       city_id: :id,
       zip_code: :zip,
       latitude: :lat,
-      longitude: :lon
+      longitude: :lon,
+      box: :bbox
     }
 
 =begin rdoc
@@ -67,18 +69,10 @@ Either yeild the class, or instanciate it.
 * +**kwargs+ - Any additional paramters
 =end
     def initialize(api_key, **kwargs)
-      @debug = kwargs[:debug] || FALSE
-      log "Debug= #{@debug}"
-
       @api_key = api_key
-      log "Api Key= #{@api_key}"
-
-      log "Args= #{kwargs}"
 
       if block_given?
-        log "Yielding"
         yield self
-        log "Yield complete."
       end
     end
 
@@ -94,8 +88,6 @@ A weather class for retrieving current and forecasted weather conditions.
 =end
     public
     def get(path, **query)
-      log "Starting request= #{path} -> #{query}"
-      start = Time.now
 
       # Format Geocode info
       query = alias_geocodes(query)
@@ -107,12 +99,7 @@ A weather class for retrieving current and forecasted weather conditions.
       uri = format_uri(OWMO::URL, Paths[path], query)
 
       # Get the weather data
-      weather = GET(uri)
-
-      elapsed_sec = (Time.now - start).round 5
-      log "Request completed in #{elapsed_sec} seconds."
-
-      weather
+      GET(uri)
     end
 
 =begin rdoc
@@ -121,13 +108,9 @@ easier to read than :q
 =end
     private
     def alias_geocodes(**query)
-      log "Query before= #{query}"
-
       (query.keys & Geocode_Aliases.keys).each do |key|
         query[Geocode_Aliases[key]] = query.delete(key)
       end
-
-      log "Query after= #{query}"
       query
     end
 
@@ -136,9 +119,7 @@ Formats the url with the given url, path, and query
 =end
     private
     def format_uri(url, path, query)
-      uri = URI "#{url}/#{path}?#{URI.encode_www_form(query).gsub('%2C', ',')}"
-      log "URI= #{uri}"
-      uri
+      URI "#{url}/#{path}?#{URI.encode_www_form(query).gsub('%2C', ',')}"
     end
 
 =begin rdoc
@@ -146,24 +127,14 @@ Sends the GET request to OpenWeatherMap.org
 =end
     private
     def GET(uri)
-      log "Starting GET request"
       response = Net::HTTP.start(uri.hostname, uri.port) do |http|
         http.request(Net::HTTP::Get.new(uri))
       end
-      log "Request returned= #{response.weather_code}: #{response.weather_message}".gsub(/: $/, '')
 
       # Check the response
       raise WeatherResponseError.new(response) if response.has_error?
 
       response.weather
-    end
-
-=begin rdoc
-Simple log method for debugging purposes
-=end
-    private
-    def log(msg)
-      puts "#{DateTime.now} :~> #{msg}" if @debug
     end
 
   end
