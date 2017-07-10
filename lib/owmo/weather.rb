@@ -93,7 +93,7 @@ A weather class for retrieving current and forecasted weather conditions.
       query = alias_geocodes(query)
 
       # Add the api key
-      query[:APPID] = @api_key
+      query[:APPID] = api_key
 
       # Create the uri
       uri = format_uri(OWMO::URL, Paths[path], query)
@@ -102,40 +102,46 @@ A weather class for retrieving current and forecasted weather conditions.
       GET(uri)
     end
 
+    private
+
+=begin rdoc
+Retruns the geocode keys from specified query.
+=end
+      def query_geocode_keys(**query)
+        query.keys & Geocode_Aliases.keys
+      end
+
 =begin rdoc
 Aliases some geocode parameters to the correct ones, for example :city_name is
 easier to read than :q
 =end
-    private
-    def alias_geocodes(**query)
-      (query.keys & Geocode_Aliases.keys).each do |key|
-        query[Geocode_Aliases[key]] = query.delete(key)
+      def alias_geocodes(**query)
+        query_geocode_keys(query).each do |key|
+          query[Geocode_Aliases[key]] = query.delete(key)
+        end
+        query
       end
-      query
-    end
 
 =begin rdoc
 Formats the url with the given url, path, and query
 =end
-    private
-    def format_uri(url, path, query)
-      URI "#{url}/#{path}?#{URI.encode_www_form(query).gsub('%2C', ',')}"
-    end
+      def format_uri(url, path, query)
+        URI "#{url}/#{path}?#{URI.encode_www_form(query).gsub('%2C', ',')}"
+      end
 
 =begin rdoc
 Sends the GET request to OpenWeatherMap.org
 =end
-    private
-    def GET(uri)
-      response = Net::HTTP.start(uri.hostname, uri.port) do |http|
-        http.request(Net::HTTP::Get.new(uri))
+      def GET(uri)
+        response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+          http.request(Net::HTTP::Get.new(uri))
+        end
+
+        # Check the response
+        raise WeatherResponseError.new(response) if response.has_error?
+
+        response.weather
       end
-
-      # Check the response
-      raise WeatherResponseError.new(response) if response.has_error?
-
-      response.weather
-    end
 
   end
 end

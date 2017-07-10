@@ -34,7 +34,7 @@ Yield a weather object for querying weather data
       if block_given?
         yield weather
       else
-        return weather
+        weather
       end
     end
   end
