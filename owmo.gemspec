@@ -9,7 +9,7 @@ require 'owmo/version'
 Gem::Specification.new do |spec|
   spec.name          = 'owmo'
   spec.version       = OWMO::VERSION
-  spec.authors       = ['Robb']
+  spec.authors       = ['Robb Randall']
   spec.email         = ['robb.randall@gmail.com']
 
   spec.summary       = 'OpenWeatherMap.org client for current and forecasted weather conditions.'
