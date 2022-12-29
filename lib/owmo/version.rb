@@ -1,8 +1,7 @@
+# frozen_string_literal: true
+
 module OWMO
-
-=begin rdoc
-Gem Version
-=end
-  VERSION = "2.0.1"
-
+  # rdoc
+  # Gem Version
+  VERSION = '2.0.1'
 end
