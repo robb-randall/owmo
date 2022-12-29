@@ -1,7 +1,9 @@
 # frozen_string_literal: true
+# coding: utf-8
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'owmo/version'
 
 Gem::Specification.new do |spec|
@@ -15,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/robb-randall/owmo'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split('\x0').reject do |f|
+  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = 'exe'
