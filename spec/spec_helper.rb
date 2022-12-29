@@ -8,4 +8,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.add_setting :api_key
+  config.api_key = "d33b4df8a76def8a9846d6dc1a5c9fa9"
 end

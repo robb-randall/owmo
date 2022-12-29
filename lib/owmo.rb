@@ -29,8 +29,8 @@ Yield a weather object for querying weather data
   end
 =end
   public
-  def self.weather(api_key, **params)
-    Weather.new(api_key, params) do |weather|
+  def self.weather(api_key, **kwargs)
+    OWMO::Weather.new(api_key, **kwargs) do |weather|
       if block_given?
         yield weather
       else
