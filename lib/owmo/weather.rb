@@ -79,7 +79,7 @@ module OWMO
 
     def get(path, **query)
       # Format Geocode info
-      query = alias_geocodes(query)
+      query = alias_geocodes(**query)
 
       # Add the api key
       query[:APPID] = api_key
@@ -103,7 +103,7 @@ module OWMO
     # Aliases some geocode parameters to the correct ones, for example :city_name is
     # easier to read than :q
     def alias_geocodes(**query)
-      query_geocode_keys(query).each do |key|
+      query_geocode_keys(**query).each do |key|
         query[GEOCODE_ALIASES[key]] = query.delete(key)
       end
       query
