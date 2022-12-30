@@ -3,5 +3,5 @@
 module OWMO
   # rdoc
   # Gem Version
-  VERSION = '2.0.1'
+  VERSION = '2.0.4'
 end
