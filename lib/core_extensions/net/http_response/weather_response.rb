@@ -19,7 +19,7 @@ module CoreExtensions
         def weather_code
           parse_weather
 
-          return (weather[:cod] || '500').to_i if weather.is_a? Hash
+          return (weather['cod'] || '500').to_i if weather.is_a? Hash
 
           200
         end
@@ -28,7 +28,7 @@ module CoreExtensions
         # Returns the response message
         def weather_message
           parse_weather
-          return weather[:message] if weather.is_a? Hash
+          return weather['message'] if weather.is_a? Hash
 
           'None'
         end
