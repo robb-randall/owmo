@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'net/http'
 
 module CoreExtensions
   module Net
@@ -17,7 +18,8 @@ module CoreExtensions
         # Returns the response code
         def weather_code
           parse_weather
-          return (weather['cod'] || '200').to_i if weather.is_a? Hash
+
+          return (weather['cod'] || '500').to_i if weather.is_a? Hash
 
           200
         end
@@ -59,3 +61,5 @@ module CoreExtensions
     end
   end
 end
+
+Net::HTTPResponse.include CoreExtensions::Net::HTTPResponse::WeatherResponse

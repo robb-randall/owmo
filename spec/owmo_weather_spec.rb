@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'core_extensions/net/http_response/weather_response'
+
+require 'net/http'
 require 'json'
 require 'spec_helper'
 
@@ -22,57 +25,60 @@ RSpec.describe OWMO::Weather do
     it 'returns weather json' do
 
       weather_json = {
-        "coord": {
-          "lon": 10.99,
-          "lat": 44.34
+        "coord" => {
+          "lon" => 10.99,
+          "lat" => 44.34
         },
-        "weather": [
+        "weather" => [
           {
-            "id": 501,
-            "main": "Rain",
-            "description": "moderate rain",
-            "icon": "10d"
+            "id" => 501,
+            "main" => "Rain",
+            "description" => "moderate rain",
+            "icon" => "10d"
           }
         ],
-        "base": "stations",
-        "main": {
-          "temp": 298.48,
-          "feels_like": 298.74,
-          "temp_min": 297.56,
-          "temp_max": 300.05,
-          "pressure": 1015,
-          "humidity": 64,
-          "sea_level": 1015,
-          "grnd_level": 933
+        "base" => "stations",
+        "main" => {
+          "temp" => 298.48,
+          "feels_like" => 298.74,
+          "temp_min" => 297.56,
+          "temp_max" => 300.05,
+          "pressure" => 1015,
+          "humidity" => 64,
+          "sea_level" => 1015,
+          "grnd_level" => 933
         },
-        "visibility": 10000,
-        "wind": {
-          "speed": 0.62,
-          "deg": 349,
-          "gust": 1.18
+        "visibility" => 10000,
+        "wind" => {
+          "speed" => 0.62,
+          "deg" => 349,
+          "gust" => 1.18
         },
-        "rain": {
-          "1h": 3.16
+        "rain" => {
+          "1h" => 3.16
         },
-        "clouds": {
-          "all": 100
+        "clouds" => {
+          "all" => 100
         },
-        "dt": 1661870592,
-        "sys": {
-          "type": 2,
-          "id": 2075663,
-          "country": "IT",
-          "sunrise": 1661834187,
-          "sunset": 1661882248
+        "dt" => 1661870592,
+        "sys" => {
+          "type" => 2,
+          "id" => 2075663,
+          "country" => "IT",
+          "sunrise" => 1661834187,
+          "sunset" => 1661882248
         },
-        "timezone": 7200,
-        "id": 3163858,
-        "name": "Zocca",
-        "cod": 200
+        "timezone" => 7200,
+        "id" => 3163858,
+        "name" => "Zocca",
+        "cod" => 200
       }
 
+      weather_response = Net::HTTPResponse.new(1.0, 200, "OK")
+      allow(weather_response).to receive(:body).and_return(weather_json)
+
       owmo = OWMO::Weather.new(api_key)
-      allow(owmo).to receive(:http_get).and_return(weather_json)
+      allow(owmo).to receive(:http_get).and_return(weather_response)
 
       expect(owmo.get(:current, city_name: "London,UK")).to eq(weather_json)
       expect(owmo.get(:current, city_id: 5328041)).to eq(weather_json)
@@ -85,14 +91,16 @@ RSpec.describe OWMO::Weather do
     end
 
     it 'throws WeatherResponseError exception when provided an invalid API key' do
-
       weather_json = {
-        "cod":401,
-        "message": "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info."
+        "cod" => 401,
+        "message" => "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info."
       }
 
+      weather_response = Net::HTTPResponse.new(1.0, 200, "OK")
+      allow(weather_response).to receive(:body).and_return(weather_json)
+
       owmo = OWMO::Weather.new('invalid api_key')
-      allow(owmo).to receive(:http_get).and_return(weather_json)
+      allow(owmo).to receive(:http_get).and_return(weather_response)
 
       expect{owmo.get(:current, city_name: "London,UK")}.to raise_error(OWMO::Weather::WeatherResponseError)
     end
