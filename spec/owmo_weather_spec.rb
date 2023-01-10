@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'core_extensions/net/http_response/weather_response'
+
+require 'net/http'
 require 'json'
 require 'spec_helper'
 
@@ -71,8 +74,11 @@ RSpec.describe OWMO::Weather do
         "cod": 200
       }
 
+      weather_response = Net::HTTPResponse.new(1.0, 200, "OK")
+      allow(weather_response).to receive(:body).and_return(weather_json)
+
       owmo = OWMO::Weather.new(api_key)
-      allow(owmo).to receive(:http_get).and_return(weather_json)
+      allow(owmo).to receive(:http_get).and_return(weather_response)
 
       expect(owmo.get(:current, city_name: "London,UK")).to eq(weather_json)
       expect(owmo.get(:current, city_id: 5328041)).to eq(weather_json)
@@ -85,14 +91,16 @@ RSpec.describe OWMO::Weather do
     end
 
     it 'throws WeatherResponseError exception when provided an invalid API key' do
-
       weather_json = {
-        "cod":401,
+        "cod": 401,
         "message": "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info."
       }
 
+      weather_response = Net::HTTPResponse.new(1.0, 200, "OK")
+      allow(weather_response).to receive(:body).and_return(weather_json)
+
       owmo = OWMO::Weather.new('invalid api_key')
-      allow(owmo).to receive(:http_get).and_return(weather_json)
+      allow(owmo).to receive(:http_get).and_return(weather_response)
 
       expect{owmo.get(:current, city_name: "London,UK")}.to raise_error(OWMO::Weather::WeatherResponseError)
     end

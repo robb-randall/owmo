@@ -6,8 +6,6 @@ require 'json'
 require 'logger'
 require 'net/http'
 
-Net::HTTPResponse.include CoreExtensions::Net::HTTPResponse::WeatherResponse
-
 module OWMO
   # rdoc
   # A weather class for retrieving current and forecasted weather conditions.
