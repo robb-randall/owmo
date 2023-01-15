@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'core_extensions/net/http_response/weather_response'
-
 require 'net/http'
 require 'json'
 require 'spec_helper'
