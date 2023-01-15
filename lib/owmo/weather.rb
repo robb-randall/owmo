@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'core_extensions/net/http_response/weather_response'
+require 'owmo/weather_response'
 
 require 'json'
 require 'logger'
@@ -19,8 +19,8 @@ module OWMO
     # rdoc
     # Weather response error to handle errors received from OpenWeatherMap.orgs API
     class WeatherResponseError < StandardError
-      def initialize(response)
-        super("ERROR #{response.weather_code}: #{response.message}")
+      def initialize(weather_response)
+        super("ERROR #{weather_response.code}: #{weather_response.weather}")
       end
     end
 
@@ -84,11 +84,13 @@ module OWMO
       uri = format_uri(OWMO::URL, PATHS[path], query)
 
       # Get the weather data
-      response = http_get(uri)
+      http_response = http_get(uri)
 
-      raise(WeatherResponseError, response) if response.error?
+      weather_response = WeatherResponse.new(http_response)
 
-      response.weather
+      raise(WeatherResponseError, weather_response) if weather_response.error?
+
+      weather_response.weather
     end
 
     private
