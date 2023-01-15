@@ -16,7 +16,7 @@ module OWMO
             rescue JSON::ParserError, TypeError
                 # Assume XML or HTML
                 @weather = http_response.body
-                @code = 200
+                @code = self.weather.length > 10 ? 200 : 500
             end
         end
 
