@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'json'
 
 module OWMO
 
@@ -8,8 +9,15 @@ module OWMO
         attr_reader :weather, :code
 
         def initialize http_response
-            @weather = http_response.body
-            @code = self.weather["cod"]
+            begin
+                # JSON
+                @weather = JSON.parse(http_response.body)
+                @code = self.weather["cod"].to_i
+            rescue JSON::ParserError, TypeError
+                # Assume XML or HTML
+                @weather = http_response.body
+                @code = 200
+            end
         end
 
         def error?

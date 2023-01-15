@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'owmo'
+
+# Create a file at the root of the repo with your api key and call it api_key.txt
+api_key = File.read('api_key.txt')
+
+
+
+examples = [
+    { description: 'current_box', path: :box, query: { bbox: [12, 32, 15, 37, 10].join(',') } },
+    { description: 'current_circle', path: :circle, query: { lat: 55.5, lon: 37.5, cnt: 10 } },
+    #{ description: 'current_group', path: :group, query: { id: [4_850_751, 4_887_398, 2_643_743, 4_164_138, 5_368_361].join(',') } },
+    { description: 'current', path: :current, query: { city_name: 'London,UK' } },
+    { description: 'forecast16', path: :forecast16, query: { city_name: 'London,UK' } },
+    { description: 'forecast5', path: :forecast5, query: { city_name: 'London,UK' } },
+    { description: 'query_all', path: :current, query: { city_name: 'London,UK', mode: 'json', units: 'imperial', lang: 'fr' } },
+    { description: 'query_geocode', path: :current, query: { city_id: 5_328_041 } },
+    { description: 'query_geocode', path: :current, query: { city_name: 'Beverly Hills' } },
+    { description: 'query_geocode', path: :current, query: { id: 5_328_041 } },
+    { description: 'query_geocode', path: :current, query: { lon: -118.41, lat: 34.09 } },
+    { description: 'query_geocode', path: :current, query: { q: 'Beverly Hills' } },
+    { description: 'query_geocode', path: :current, query: { zip: 90_210 } },
+    { description: 'query_geocode', path: :current, query: { zip_code: 90_210 } },
+    { description: 'query_mode', path: :current, query: { city_name: 'London,UK' } },
+    { description: 'query_mode', path: :current, query: { city_name: 'London,UK', mode: :html } },
+    { description: 'query_mode', path: :current, query: { city_name: 'London,UK', mode: :json } },
+    { description: 'query_mode', path: :current, query: { city_name: 'London,UK', mode: :xml } },
+    { description: 'query_units', path: :current, query: { city_name: 'London,UK' } },
+    { description: 'query_units', path: :current, query: { city_name: 'London,UK', units: :imperial } },
+    { description: 'query_units', path: :current, query: { city_name: 'London,UK', units: :metric } }
+]
+
+puts "OWMO Version #{OWMO::VERSION}"
+
+OWMO.weather(api_key) do |weather|
+    examples.each do |example|
+        puts '', '/********************', example[:description], '********************/'
+        pp weather.get example[:path], **example[:query]
+    end
+end
