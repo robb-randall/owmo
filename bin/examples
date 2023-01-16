@@ -4,40 +4,73 @@
 require 'bundler/setup'
 require 'owmo'
 
-# Create a file at the root of the repo with your api key and call it api_key.txt
-api_key = File.read('api_key.txt')
+# Read the API key
+api_key_file = 'api_key.txt'
 
+unless File.exist? api_key_file
+  puts %(
+    File `#{api_key_file}` does not exist in the root of the repository.
+    Please create the file with your OpenWeatherMap API key and rerun bin/example.
 
+      # #{api_key_file} << cat '<your api key>'
+  )
+  exit(1)
+end
 
-examples = [
-    { description: 'current_box', path: :box, query: { bbox: [12, 32, 15, 37, 10].join(',') } },
-    { description: 'current_circle', path: :circle, query: { lat: 55.5, lon: 37.5, cnt: 10 } },
-    #{ description: 'current_group', path: :group, query: { id: [4_850_751, 4_887_398, 2_643_743, 4_164_138, 5_368_361].join(',') } },
-    { description: 'current', path: :current, query: { city_name: 'London,UK' } },
-    { description: 'forecast16', path: :forecast16, query: { city_name: 'London,UK' } },
-    { description: 'forecast5', path: :forecast5, query: { city_name: 'London,UK' } },
-    { description: 'query_all', path: :current, query: { city_name: 'London,UK', mode: 'json', units: 'imperial', lang: 'fr' } },
-    { description: 'query_geocode', path: :current, query: { city_id: 5_328_041 } },
-    { description: 'query_geocode', path: :current, query: { city_name: 'Beverly Hills' } },
-    { description: 'query_geocode', path: :current, query: { id: 5_328_041 } },
-    { description: 'query_geocode', path: :current, query: { lon: -118.41, lat: 34.09 } },
-    { description: 'query_geocode', path: :current, query: { q: 'Beverly Hills' } },
-    { description: 'query_geocode', path: :current, query: { zip: 90_210 } },
-    { description: 'query_geocode', path: :current, query: { zip_code: 90_210 } },
-    { description: 'query_mode', path: :current, query: { city_name: 'London,UK' } },
-    { description: 'query_mode', path: :current, query: { city_name: 'London,UK', mode: :html } },
-    { description: 'query_mode', path: :current, query: { city_name: 'London,UK', mode: :json } },
-    { description: 'query_mode', path: :current, query: { city_name: 'London,UK', mode: :xml } },
-    { description: 'query_units', path: :current, query: { city_name: 'London,UK' } },
-    { description: 'query_units', path: :current, query: { city_name: 'London,UK', units: :imperial } },
-    { description: 'query_units', path: :current, query: { city_name: 'London,UK', units: :metric } }
-]
+api_key = File.read(api_key_file).chomp
+
+unless api_key.length == 32
+  puts %(
+    File `#{api_key_file}` does not contain a valid OpenWeatherMap API key.
+    Please update the file with a valid key and rerun bin/example.
+
+    Found: '#{api_key}'
+  )
+  exit(1)
+end
+
+examples = {
+  'current_box' => { path: :box, query: { bbox: [12, 32, 15, 37, 10].join(',') } },
+  'current_circle' => { path: :circle, query: { lat: 55.5, lon: 37.5, cnt: 10 } },
+  'current_group' => { path: :group,
+                       query: { id: [4_850_751, 4_887_398, 2_643_743, 4_164_138, 5_368_361].join(',') } },
+  'forecast16 by city_name' => { path: :forecast16, query: { city_name: 'London,UK' } },
+  'forecast5 by city_name' => { path: :forecast5, query: { city_name: 'London,UK' } },
+  'current by city_name, (json/imperial/fr)' => { path: :current,
+                                                  query: { city_name: 'London,UK', mode: 'json', units: 'imperial',
+                                                           lang: 'fr' } },
+  'current by city_id' => { path: :current, query: { city_id: 5_328_041 } },
+  'current by city_name' => { path: :current, query: { city_name: 'Beverly Hills' } },
+  'current by id' => { path: :current, query: { id: 5_328_041 } },
+  'current by lon/lat' => { path: :current, query: { lon: -118.41, lat: 34.09 } },
+  'current by q' => { path: :current, query: { q: 'Beverly Hills' } },
+  'current by zip' => { path: :current, query: { zip: 90_210 } },
+  'current by zip_code' => { path: :current, query: { zip_code: 90_210 } },
+  'current by city_name (html)' => { path: :current, query: { city_name: 'London,UK', mode: :html } },
+  'current by city_name (json)' => { path: :current, query: { city_name: 'London,UK', mode: :json } },
+  'current by city_name (xml)' => { path: :current, query: { city_name: 'London,UK', mode: :xml } },
+  'current by city_name (imperial)' => { path: :current, query: { city_name: 'London,UK', units: :imperial } },
+  'current by city_name (metric)' => { path: :current, query: { city_name: 'London,UK', units: :metric } }
+}
+
+execution_output = {}
 
 puts "OWMO Version #{OWMO::VERSION}"
 
 OWMO.weather(api_key) do |weather|
-    examples.each do |example|
-        puts '', '/********************', example[:description], '********************/'
-        pp weather.get example[:path], **example[:query]
+  examples.each do |name, params|
+    puts '', '/********************', name, '********************/'
+    begin
+      pp weather.get params[:path], **params[:query]
+      execution_output[name] = 'SUCCESS'
+    rescue StandardError => e
+      pp e.message
+      execution_output[name] = 'FAILURE'
     end
+  end
+end
+
+puts "\n\nSummary:"
+execution_output.each do |name, outcome|
+  puts "  - [#{outcome}] #{name.capitalize}"
 end
