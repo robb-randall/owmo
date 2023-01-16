@@ -1,4 +1,4 @@
-name: Rake Release
+name: Gem Release
 
 on:
   push:
