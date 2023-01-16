@@ -13,6 +13,5 @@
 
 
 *.gem
-test.rb
-scratch.rb
 api_key.txt
+coverage
