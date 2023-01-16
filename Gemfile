@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'rake_tasks', '>= 5.x'
+
 gem 'rspec'
 
 gem 'rubocop', require: false
