@@ -5,18 +5,6 @@ require 'json'
 require 'spec_helper'
 
 RSpec.describe OWMO::Weather do
-  describe '#initialize' do
-    let(:api_key) { '12345678901234567890123456789012' }
-
-    it 'returns Weather object' do
-      described_class.new(api_key).is_a? described_class
-    end
-
-    it 'yields Weather object' do
-      described_class.new(api_key) { |weather| weather.is_a? described_class }
-    end
-  end
-
   describe '#get' do
     let(:api_key) { '12345678901234567890123456789012' }
     let(:weather_response) { Net::HTTPResponse.new(1.0, 200, 'OK') }

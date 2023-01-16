@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 2.x'
   spec.add_development_dependency 'rake', '~> 13.x'
   spec.add_development_dependency 'rspec', '~> 3.x'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end
