@@ -11,4 +11,3 @@ RuboCop::RakeTask.new(:rubocop) do |task|
 end
 
 task default: %i[rubocop spec]
-

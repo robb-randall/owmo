@@ -11,10 +11,11 @@ RSpec.describe OWMO do
     let(:api_key) { '12345678901234567890123456789012' }
 
     it 'returns Weather object' do
-      OWMO.weather(api_key).is_a? OWMO::Weather
+      described_class.weather(api_key).is_a? OWMO::Weather
     end
+
     it 'yields Weather object' do
-      OWMO.weather(api_key) { |weather| weather.is_a? OWMO::Weather }
+      described_class.weather(api_key) { |weather| weather.is_a? OWMO::Weather }
     end
   end
 end

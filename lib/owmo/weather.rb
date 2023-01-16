@@ -121,11 +121,9 @@ module OWMO
     # Sends the GET request to OpenWeatherMap.org
     # :nocov:
     def http_get(uri)
-      response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+      Net::HTTP.start(uri.hostname, uri.port) do |http|
         http.request(Net::HTTP::Get.new(uri))
       end
-
-      response
     end
   end
   # :nocov:
